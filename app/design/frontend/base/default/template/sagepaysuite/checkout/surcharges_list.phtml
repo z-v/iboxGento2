@@ -1,0 +1,20 @@
+<?php if($this->canApplySurcharge()): ?>
+    
+    
+    <div class="surcharge-list">
+        <p><?php echo $this->__('If you pay with any of these cards, a surcharge amount will be applied.'); ?></p>
+        <table>
+            <?php foreach ($this->getSurcharges() as $rule):
+                if($rule['amount'] <= 0):
+                    continue;
+                endif;
+                $image = $this->helper('sagepaysuite')->getCcImage($this->helper('sagepaysuite')->getCardLabel($rule['creditcard'], false));
+            ?>
+                <tr>
+                    <td><img width="35" src="<?php echo $image; ?>" /></td><td><?php echo $this->wouldAdd($rule['chargetype'], $rule['amount']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+
+<?php endif; ?>

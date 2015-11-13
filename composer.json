@@ -1,0 +1,64 @@
+{
+<<<<<<< HEAD
+    "name": "webcomm/magento-boilerplate",
+    "type": "magento-module",
+    "description": "HTML5 Twitter Bootstrap 3.1 Magento Boilerplate Template",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ben Corlett",
+            "email": "bencorlett@me.com"
+        },
+        {
+            "name": "Webcomm Pty Ltd",
+            "email": "contact@webcomm.com.au"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-hackathon/magento-composer-installer"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer":"*"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        },
+        "magento-root-dir": "./",
+        "magento-deploystrategy": "copy",
+        "map": [
+            ["app/code/community/Webcomm/BootstrapNavigation", "app/code/community/Webcomm/BootstrapNavigation"],
+            ["app/code/community/Webcomm/MagentoBoilerplate", "app/code/community/Webcomm/MagentoBoilerplate"],
+            ["app/design/frontend/boilerplate/default", "app/design/frontend/boilerplate/default"],
+            ["app/etc/modules/Webcomm_BootstrapNavigation.xml", "app/etc/modules/Webcomm_BootstrapNavigation.xml"],
+            ["app/etc/modules/Webcomm_MagentoBoilerplate.xml", "app/etc/modules/Webcomm_MagentoBoilerplate.xml"],
+            ["skin/frontend/boilerplate/default", "skin/frontend/boilerplate/default"]
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+=======
+  "name": "webcomm/magento-boilerplate",
+  "type": "magento-module",
+  "description": "A boilerplate project for creating beautiful sites using Magento, powered by Foundation 5.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Webcomm",
+      "email": "hello@webcomm.io"
+    }
+  ],
+  "extra": {
+    "map": [
+      ["src/app/code/community/Webcomm/MagentoBoilerplate", "app/code/community/Webcomm/MagentoBoilerplate"],
+      ["src/app/design/frontend/base/default/layout/magentoboilerplate.xml", "app/design/frontend/base/default/layout/magentoboilerplate.xml"],
+      ["src/app/design/frontend/base/default/template/magentoboilerplate", "app/design/frontend/base/default/template/magentoboilerplate"],
+      ["src/app/etc/modules/Webcomm_MagentoBoilerplate.xml", "app/etc/modules/Webcomm_MagentoBoilerplate.xml"]
+    ]
+  }
+>>>>>>> upstream/master
+}

@@ -1,0 +1,55 @@
+<?php
+    if($this->getParentBlock()->getInfo()->getOrder()->getSagepayInfo() && $this->getParentBlock()->getInfo()->getOrder()->getSagepayInfo()->getTxType() != Ebizmarts_SagePaySuite_Model_Api_Payment::REQUEST_TYPE_AUTHENTICATE){
+        return;
+    }
+
+    $authorises = $this->getParentBlock()->getAuthorisesCollection();
+
+    if($authorises->getSize()):
+?>
+<div class="grid" id="sagepay-authorises-table">
+    <?php echo $this->helper('sagepaysuite')->__('<strong>AUTHORISE</strong>s'); ?>
+    <table class="data" cellspacing="0">
+        <thead>
+            <tr class="headings">
+                <th><?php echo $this->helper('sagepaysuite')->__('Status'); ?></th>
+                <th><?php echo $this->helper('sagepaysuite')->__('Amount'); ?></th>
+                <th><?php echo $this->helper('sagepaysuite')->__('VPS Tx Id'); ?></th>
+                <th><?php echo $this->helper('sagepaysuite')->__('Auth No'); ?></th>
+                <th><?php echo $this->helper('sagepaysuite')->__('Date'); ?></th>
+            </tr>
+        </thead>
+        <tbody class="even">
+            <?php foreach($authorises as $_authorise): ?>
+            <tr class="border">
+                <td><?php echo $_authorise->getStatus(); ?></td>
+                <?php if($_authorise->getCurrency()): ?>
+                    <td><?php echo Mage::app()->getLocale()->currency($_authorise->getCurrency())->toCurrency($_authorise->getAmount()); ?></td>
+                <?php else: ?>
+                    <td><?php echo $this->helper('core')->currency($_authorise->getAmount()); ?></td>
+                <?php endif;?>
+                <td><?php echo $this->getParentBlock()->detailLink($_authorise->getVpsTxId()); ?></td>
+                <td><?php echo $_authorise->getTxAuthNo(); ?></td>
+                <td><?php echo $this->formatDate(new Zend_Date(strtotime($_authorise->getActionDate())), 'short', true); ?></td>
+            </tr>
+            <tr class="border">
+                <td colspan="5">
+                    <?php if($_authorise->getAvscv2()): ?>
+                        <?php echo $this->helper('sagepaysuite')->__('AVS CV2: <span class="shield-flag %s">%s</span>', $this->helper('sagepaysuite')->cs($_authorise->getAvscv2()), $_authorise->getAvscv2()); ?><br />
+                    <?php endif; ?>
+                    <?php if($_authorise->getAddressResult()): ?>
+                        <?php echo $this->helper('sagepaysuite')->__('Address Result: <span class="shield-flag %s">%s</span>', $this->helper('sagepaysuite')->cs($_authorise->getAddressResult()), $_authorise->getAddressResult()); ?><br />
+                    <?php endif; ?>
+                    <?php if($_authorise->getPostcodeResult()): ?>
+                        <?php echo $this->helper('sagepaysuite')->__('Postcode Result: <span class="shield-flag %s">%s</span>', $this->helper('sagepaysuite')->cs($_authorise->getPostcodeResult()), $_authorise->getPostcodeResult()); ?><br />
+                    <?php endif; ?>
+                    <?php if($_authorise->getCv2result()): ?>
+                        <?php echo $this->helper('sagepaysuite')->__('CV2 Result: <span class="shield-flag %s">%s</span>', $this->helper('sagepaysuite')->cs($_authorise->getCv2result()), $_authorise->getCv2result()); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>

@@ -1,0 +1,45 @@
+/**
+ * @category	Fishpig
+ * @package		Fishpig_Bolt
+ * @license		http://fishpig.co.uk/license.txt
+ * @author		Ben Tideswell <help@fishpig.co.uk>
+ */
+
+CHANGELOG
+
+- 22/12/2014 - v2.0.2.2
+- Default to 'File' cache if not files or memcache
+
+- 12/12/2014 - v2.0.2.1
+- Fixed issue with refresh system
+
+- 09/12/2014 - v2.0.2.0
+- Fixed issue that stopped first request being cached
+
+- 08/12/2014 - v2.0.1.3
+- Stopped auto refresh of data when accessing via API
+
+- 08/12/2014 - v2.0.1.2
+- Removed Fishpig_Bolt_Exception class
+
+- 01/12/2014 - v2.0.1.1
+- Fixed issue that caused 'Bolt Full Page Cache by FishPig' to display in Magento Admin toggle bar
+
+- 01/12/2014 - v2.0.1.0
+- Fixed API issue
+
+- 24/11/2014 - v2.0.0.5
+- Added better configuration error checks
+
+- 17/11/2014 - v2.0.0.4
+- Added _validateEarly to Fishpig_Bolt_App class
+
+- 14/11/2014 - v2.0.0.3
+- Added quote_hash to cache key for the hole punch cache. This allows the holepunch data to be cached when using a mini cart in the header
+
+- 12/11/2014 - v2.0.0.2
+- Added hole punch cache
+
+- 28/10/2014 - v2.0.0.0
+- Added Memcache and new file cache/session storage options
+- Added better config defaults for easier setup

@@ -1,0 +1,87 @@
+<?php
+/**
+ * @see Ebizmarts_SagePaySuite_Block_Info_SagePayDirectPro
+ */
+
+ $sagepay = new Varien_Object;
+
+ if(is_object($this->getInfo()->getOrder()) && !is_null($this->getInfo()->getOrder()->getSagepayInfo())){
+ 	$sagepay = $this->getInfo()->getOrder()->getSagepayInfo();
+ }
+
+
+
+ #$sagepay = (is_object($this->getInfo()->getOrder()) ? $this->getInfo()->getOrder()->getSagepayInfo() : new Varien_Object());
+ if($this->getInfo()->getCcLast4() && !is_null($this->getInfo()->getCcLast4())){
+ 	$sagepay->setCardType($this->getInfo()->getCcType())
+ 	->setLastFourDigits($this->getInfo()->getCcLast4());
+ }else if(is_null($sagepay->getCardType()) && ($sagepay = $this->getTokenCard())){
+ 	$sagepay->setLastFourDigits($sagepay->getLastFour());
+ }else{
+     $reg = Mage::registry('sageserverpost');
+     if( !is_null($reg)){
+         $sagepay->setCardType($reg->getData('CardType'))
+             ->setLastFourDigits($reg->getData('Last4Digits'));
+     }
+ }
+ $_code = $this->getMethod()->getCode();
+
+
+ if(!$sagepay->getLastFourDigits() && ($_code == 'sagepayserver' || $_code == 'sagepayserver_moto' || $_code == 'sagepaypaypal') && is_object($this->getInfo()->getOrder())){
+ 	$sagepay = Mage::getModel('sagepaysuite2/sagepaysuite_transaction')
+                ->loadByParent($this->getInfo()->getOrder()->getId());
+ }
+?>
+
+<?php if(true === $this->helper('sagepaysuite/checkout')->isMultiShippingOverview()): ?>
+
+	<input type="hidden" id="suite_ms_payment_method" name="suite_payment_method" value="<?php echo $this->htmlEscape($_code); ?>" />
+
+	<?php if($this->getInfo()->getCcType() && $this->getInfo()->getCcOwner()): ?>
+
+		<input type="hidden" name="payment[cc_type]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcType()); ?>" />
+		<input type="hidden" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcOwner()); ?>" />
+		<input type="hidden" name="payment[cc_exp_month]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcExpMonth()); ?>" />
+		<input type="hidden" name="payment[cc_exp_year]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcExpYear()); ?>" />
+		<input type="hidden" name="payment[cc_giftaid]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcGiftaid()); ?>" />
+
+		<input type="hidden" name="payment[cc_ss_issue]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcSsIssue()); ?>" />
+		<input type="hidden" name="payment[cc_ss_start_month]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcSsStartMonth()); ?>" />
+		<input type="hidden" name="payment[cc_ss_start_year]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcSsStartYear()); ?>" />
+
+	<?php elseif($this->getInfo()->getTokenCvv() && $this->getInfo()->getSagepayTokenCcId()): ?>
+		<input type="hidden" name="payment[token_cvv]" value="<?php echo $this->htmlEscape($this->getInfo()->getTokenCvv()); ?>" />
+		<input type="hidden" name="payment[sagepay_token_cc_id]" value="<?php echo $this->htmlEscape($this->getInfo()->getSagepayTokenCcId()); ?>" />
+	<?php elseif($this->getInfo()->getSagepayTokenCcId()): ?>
+		<input type="hidden" id="sagepay_server_token_cc_id" name="payment[sagepay_server_token_cc_id]" value="<?php echo $this->htmlEscape($this->getInfo()->getSagepayTokenCcId()); ?>" />
+	<?php endif; ?>
+
+       <?php if($this->getInfo()->getRemembertoken()): ?>
+                <input id="token-remembertoken" type="hidden" name="payment[remembertoken]" value="<?php echo $this->getInfo()->getRemembertoken(); ?>" />
+                <input type="hidden" name="payment[cc_nickname]" value="<?php echo $this->htmlEscape($this->getInfo()->getCcNickname()); ?>" />
+       <?php endif; ?>
+
+<?php endif; ?>
+	<p><?php echo $this->getMethod()->getTitle(); ?></p>
+    <?php if($sagepay->getLastFourDigits()): ?>
+        <table>
+            <tr>
+                <td><p><?php echo $this->__('CC Type:'); ?></p></td>
+                <td><?php echo $this->getCcTypeName($sagepay->getCardType()); ?></td>
+            </tr>
+            <tr>
+                <td><p><?php echo $this->__('CC Number:'); ?></p></td>
+                <td><p>**********<?php echo $sagepay->getLastFourDigits(); ?></p></td>
+            </tr>
+            <?php if($sagepay->getCardExpiryDate()): ?>
+                <tr>
+                    <td><p><?php echo $this->__('CC Exp. Date:'); ?></p></td>
+                    <td><p><?php echo $sagepay->getCardExpiryDate(); ?></p></td>
+                </tr>
+            <?php endif; ?>
+        </table>
+    <?php endif; ?>
+
+<?php if(Mage::getSingleton('core/translate')->getTranslateInline() === true && $this->getIsSecureMode() != true && !Mage::app()->getRequest()->isXmlHttpRequest()): ?>
+	<?php echo $this->getChildHtml(); ?>
+<?php endif; ?>
